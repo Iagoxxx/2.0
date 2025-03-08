@@ -1,0 +1,10 @@
+
+Set-ExecutionPolicy Bypass -Scope Process -Force
+
+# Baixar e executar o instalador do Chocolatey
+[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+
+choco -v
+
+https://docs.chocolatey.org/en-us/
