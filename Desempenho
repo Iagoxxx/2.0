@@ -1,0 +1,56 @@
+# ⚡ Otimizar Windows para Desempenho Máximo ⚡
+# 🚀 Desativa efeitos visuais, otimiza energia e desativa serviços desnecessários
+
+Write-Host "⏳ Aplicando otimizações para máximo desempenho..." -ForegroundColor Yellow
+
+# 1️⃣ DESATIVAR ANIMAÇÕES E EFEITOS VISUAIS
+Write-Host "🔧 Desativando animações e efeitos visuais..."
+$visualEffects = @(
+    "MinAnimate", "UserPreferencesMask", "VisualFXSetting", "DragFullWindows", 
+    "FontSmoothing", "MenuShowDelay", "ListviewAlphaSelect", "ListviewShadow", 
+    "TaskbarAnimations"
+)
+foreach ($effect in $visualEffects) {
+    reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v $effect /t REG_DWORD /d 0 /f | Out-Null
+}
+Write-Host "✅ Efeitos visuais desativados."
+
+# 2️⃣ ALTERAR PLANO DE ENERGIA PARA ALTO DESEMPENHO
+Write-Host "🔋 Configurando plano de energia para 'Alto Desempenho'..."
+powercfg /S SCHEME_MIN
+Write-Host "✅ Energia otimizada."
+
+# 3️⃣ DESATIVAR SERVIÇOS DESNECESSÁRIOS
+Write-Host "🚀 Desativando serviços desnecessários..."
+$servicos = @(
+    "DiagTrack", "WSearch", "SysMain", "XblGameSave", "XboxNetApiSvc", "dmwappushservice"
+)
+foreach ($servico in $servicos) {
+    Stop-Service -Name $servico -Force -ErrorAction SilentlyContinue
+    Set-Service -Name $servico -StartupType Disabled
+}
+Write-Host "✅ Serviços otimizados."
+
+# 4️⃣ DESATIVAR APPS EM SEGUNDO PLANO
+Write-Host "❌ Desativando aplicativos em segundo plano..."
+reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications" /v GlobalUserDisabled /t REG_DWORD /d 1 /f | Out-Null
+Write-Host "✅ Aplicativos em segundo plano desativados."
+
+# 5️⃣ DESATIVAR ONEDRIVE
+Write-Host "🚫 Desativando OneDrive..."
+taskkill /f /im OneDrive.exe | Out-Null
+Start-Process -FilePath "$env:SystemRoot\SysWOW64\OneDriveSetup.exe" -ArgumentList "/uninstall" -NoNewWindow -Wait
+Write-Host "✅ OneDrive desativado."
+
+# 6️⃣ LIMPAR ARQUIVOS TEMPORÁRIOS
+Write-Host "🧹 Limpando arquivos temporários..."
+Remove-Item -Path "C:\Windows\Temp\*" -Recurse -Force -ErrorAction SilentlyContinue
+Remove-Item -Path "$env:TEMP\*" -Recurse -Force -ErrorAction SilentlyContinue
+Write-Host "✅ Arquivos temporários removidos."
+
+# 7️⃣ REINICIAR O EXPLORER PARA APLICAR ALTERAÇÕES
+Write-Host "🔄 Reiniciando o Windows Explorer..."
+Stop-Process -Name explorer -Force
+Start-Process explorer
+Write-Host "✅ Otimizações aplicadas com sucesso! 🚀"
+
