@@ -54,3 +54,6 @@ Stop-Process -Name explorer -Force
 Start-Process explorer
 Write-Host "✅ Otimizações aplicadas com sucesso! 🚀"
 
+
+Voltar padrão
+sfc /scannow
